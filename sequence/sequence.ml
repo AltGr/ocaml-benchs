@@ -56,6 +56,7 @@ let fold t ~init ~f =
   in
   match t with
   | Sequence(seed, next) -> loop seed init next f
+[@@inline always]
 
 let to_list_rev t =
       fold t ~init:[] ~f:(fun l x -> x::l)
@@ -106,6 +107,7 @@ let map t ~f =
                | Done -> Done
                | Skip s -> Skip s
                | Yield(a,s) -> Yield(f a,s))
+[@@inline always]
 
 let mapi t ~f =
   match t with
@@ -127,6 +129,7 @@ let filter t ~f =
                | Skip s -> Skip s
                | Yield(a,s) when f a -> Yield(a,s)
                | Yield (_,s) -> Skip s)
+[@@inline always]
 
 let filteri t ~f =
   map ~f:snd (
